@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
-
-class PhoneController extends Controller
+use App\Models\Phone;
+class PhoneController extends BaseApiController
 {
-    //
+    public function __construct()
+    {
+        $this->resourceType = Phone::class;
+    }
 }

@@ -20,7 +20,7 @@ class CreateDocumentsTable extends Migration
             $table->integer('number')->unsigned()->index();
             $table->json('additional_infos')->nullable();
 
-            $table->integer('people_id')->unsigned()->index();
+            $table->unsignedBigInteger('people_id');
             $table->foreign('people_id')->references('id')->on('people');
             $table->softDeletes();
             

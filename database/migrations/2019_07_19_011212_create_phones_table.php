@@ -18,7 +18,7 @@ class CreatePhonesTable extends Migration
             $table->string('number');
             $table->integer('priority')->unsigned()->default(1);
 
-            $table->integer('people_id')->unsigned()->index();
+            $table->unsignedBigInteger('people_id');
             $table->foreign('people_id')->references('id')->on('people');
             
             $table->softDeletes();

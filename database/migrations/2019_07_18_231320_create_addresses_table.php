@@ -27,7 +27,7 @@ class CreateAddressesTable extends Migration
 
             $table->string('address_type');
 
-            $table->integer('people_id')->unsigned()->index();
+            $table->unsignedBigInteger('people_id');
             $table->foreign('people_id')->references('id')->on('people');
 
             $table->softDeletes();

@@ -16,10 +16,11 @@ use Illuminate\Http\Request;
 Route::group([
     'middleware'    => 'api',
     'prefix'        => 'auth',
-    'namespace'     => 'api'
+    'namespace'     => 'Api'
 ], function ($router) {
     Route::post('login', 'AuthController@login')->name('login');
     Route::post('refresh', 'AuthController@refresh');
     Route::post('me', 'AuthController@me');
     Route::post('logout', 'AuthController@logout');
 });
+

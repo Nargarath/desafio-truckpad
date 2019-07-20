@@ -4,10 +4,15 @@ namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use App\Models\People;
+use App\Http\Resources\PeopleResource;
+use App\Http\Resources\DocumentResource;
+use App\Http\Resources\AddressResource;
+use App\Http\Resources\PhoneResource;
 
 class BaseApiController extends Controller
 {
     protected $resourceType;
+    protected $resourceName;
 
     public function __construct()
     {
@@ -16,12 +21,16 @@ class BaseApiController extends Controller
 
     public function get($id)
     {
-        return $this->resourceType::find($id);
+        return $this->resourceName::collection(
+            $this->resourceType::find($id)
+        );
     }
 
     public function post(Request $request)
     {
-        return;
+        return $this->resourceName::collection(
+            $this->resourceType::create($request->all())
+        );
     }
 
     public function put(Request $request)

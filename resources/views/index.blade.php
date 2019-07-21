@@ -5,11 +5,13 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Laravel</title>
+        <title>Vue App</title>
 
-        <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
+        <link href="{{ mix('css/build.css') }}" rel="stylesheet">
+        <script src="{{ mix('js/build.js') }}"></script>
     </head>
     <body>
-        
+        <div id="app">
+        </div>
     </body>
 </html>

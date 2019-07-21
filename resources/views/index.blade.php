@@ -8,10 +8,12 @@
         <title>Vue App</title>
 
         <link href="{{ mix('css/build.css') }}" rel="stylesheet">
-        <script src="{{ mix('js/build.js') }}"></script>
+        
     </head>
     <body>
         <div id="app">
+            <router-view></router-view>
         </div>
+        <script src="{{ mix('js/build.js') }}"></script>
     </body>
 </html>

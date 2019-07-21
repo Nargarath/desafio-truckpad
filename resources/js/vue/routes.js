@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueRouter from "vue-router"  
+import signIn from './pages/signin/index';
 
 /**
  * Config
@@ -9,13 +10,14 @@ Vue.use(VueRouter)
 const pageWhiteList = ['/', '/signin']
 
 const routes =  [
-    
+    { path: '/', component: signIn }
 ];
 
 const router = new VueRouter({
+	mode: 'history',
     routes 
 })
-
+/*
 router.beforeEach((to, from, next) => {
 	let _accessToken = store.state.auth.accessToken || ''
 	let _isAuthorize = store.state.auth.isAuthorize || false
@@ -43,5 +45,6 @@ router.beforeEach((to, from, next) => {
 router.afterEach((to, from) => {
 
 })
+*/
 
 export { router };

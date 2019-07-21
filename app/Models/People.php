@@ -7,6 +7,7 @@ use App\Models\Relations\HasManyDocument;
 use App\Models\Relations\HasManyAddress;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Relations\HasManyPhone;
+use Laravel\Scout\Searchable;
 
 class People extends Model
 {
@@ -24,4 +25,16 @@ class People extends Model
         'name',
         'birth_date'
     ];
+
+    /**
+     * Get the index name for the model.
+     *
+     * @return string
+     */
+    public function searchableAs()
+    {
+        $array = $this->toArray();
+
+        return 'name';
+    }
 }

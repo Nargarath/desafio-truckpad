@@ -9,6 +9,9 @@ use App\Http\Resources\DocumentResource;
 use App\Http\Resources\AddressResource;
 use App\Http\Resources\PhoneResource;
 
+use App\Http\Controllers\Controller;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+
 class BaseApiController extends Controller
 {
     protected $resourceType;
@@ -18,38 +21,95 @@ class BaseApiController extends Controller
     {
         $this->middleware('jwt.auth');
     }
-
+    
     public function get($id)
     {
-        return $this->resourceName::collection(
-            $this->resourceType::find($id)
+       
+        return new $this->resourceName(
+            $this->resourceType::findOrFail($id)
         );
+    
     }
 
     public function post(Request $request)
     {
-        return $this->resourceName::collection(
-            $this->resourceType::create($request->all())
-        );
+        try {
+            $postted = new $this->resourceName(
+                $this->resourceType::create($request->all())
+            );
+
+            return response()->json($postted, 201);
+        }  
+        catch (Exception $e) 
+        {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
 
     public function put(Request $request)
     {
-        return;
+        try {
+            $putted =  new $this->resourceName(
+                $this->resourceType::update($request->all())
+            );
+            return response()->json($putted, 200);
+        }
+        catch (Exception $e) 
+        {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
 
     public function patch(Request $request)
     {
-        return;
+        try {
+            $patched =  new $this->resourceName(
+                $this->resourceType::update($request->all())
+            );
+            return response()->json($patched, 200);
+        }
+        catch (Exception $e) 
+        {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
 
     public function delete($id)
     {
-        return;
+        try {
+            $deleted = $this->resourceType::find($id);
+            if ($deleted) 
+            {
+                $deleted->delete(); 
+            } 
+            else 
+            {
+                return response()->json(true,204);
+            }           
+        }
+        catch (ModelNotFoundException $ex) 
+        {
+            throw $ex;
+        }
+        catch (Exception $e) 
+        {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
 
     public function datatable(Request $request)
     {
-        return;
+        extract($request->all());
+        
+        $datatable = $this->resourceType::orderBy($order_by??'id', $order_type??'desc');
+        
+
+        if (!empty($search))
+        {
+            $datatable = $datatable->where($searchable,'like',"%$search%");
+        }
+        
+        
+        return $datatable->paginate($limit??10);
     }
 }

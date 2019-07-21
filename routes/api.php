@@ -24,3 +24,16 @@ Route::group([
     Route::post('logout', 'AuthController@logout');
 });
 
+Route::group([
+    'middleware'    => 'auth:api',
+    'prefix'        => 'people',
+    'namespace'     => 'Api'
+], function ($router) {
+    Route::get('/', 'PeopleController@datatable')->name('people.datatable');
+    Route::post('/', 'PeopleController@post')->name('people.post');
+    Route::get('{id}', 'PeopleController@get')->name('people.get');
+    Route::put('{id}', 'PeopleController@put')->name('people.put');
+    Route::patch('{id}', 'PeopleController@patch')->name('people.patch');
+    Route::delete('{id}', 'PeopleController@delete')->name('people.delete');
+});
+

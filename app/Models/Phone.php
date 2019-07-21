@@ -10,7 +10,7 @@ class Phone extends Model
 {
     use BelongsToPeople,
         SoftDeletes;
-
+        
     protected $fillable = [
         'number',
         'priority'

@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Relations\BelongsToPeople;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Enums\DocumentEnum;
+use Laravel\Scout\Searchable;
 
 class Document extends Model
 {

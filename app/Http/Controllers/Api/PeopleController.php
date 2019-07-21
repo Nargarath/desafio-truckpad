@@ -13,4 +13,5 @@ class PeopleController extends BaseApiController
         $this->resourceType = People::class;
         $this->resourceName = PeopleResource::class;
     }
+
 }

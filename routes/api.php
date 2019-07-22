@@ -18,10 +18,10 @@ Route::group([
     'prefix'        => 'auth',
     'namespace'     => 'Api'
 ], function ($router) {
-    Route::post('login', 'AuthController@login')->name('login');
-    Route::post('refresh', 'AuthController@refresh');
-    Route::post('me', 'AuthController@me');
-    Route::post('logout', 'AuthController@logout');
+    Route::post('login', 'AuthController@login')->name('auth.login');
+    Route::get('refresh', 'AuthController@refresh')->name('auth.refresh');
+    Route::get('me', 'AuthController@me')->name('auth.me');
+    Route::get('logout', 'AuthController@logout')->name('auth.logout');
 });
 
 Route::group([

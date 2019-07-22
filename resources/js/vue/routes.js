@@ -1,50 +1,56 @@
 import Vue from 'vue'
 import VueRouter from "vue-router"  
-import signIn from './pages/signin/index';
+import signIn from './pages/signin/index'
+import dashboard from './pages/dashboard/index'
+import store from './store'
 
 /**
  * Config
  */
 Vue.use(VueRouter)
 
-const pageWhiteList = ['/', '/signin']
 
 const routes =  [
-    { path: '/', component: signIn }
+	{ 	
+		path: '/', component: signIn,
+		meta: {
+			requiresAuth: false
+		}  
+	},
+	{
+		path: '/dashboard', 
+		component: dashboard, 
+		name: 'dashboard.index',
+		meta: {
+			requiresAuth: true
+		} 
+	}
 ];
 
 const router = new VueRouter({
-	mode: 'history',
     routes 
 })
-/*
-router.beforeEach((to, from, next) => {
-	let _accessToken = store.state.auth.accessToken || ''
-	let _isAuthorize = store.state.auth.isAuthorize || false
 
-	if (to.matched.some(record => record.meta.requiresAuth)) {
-		if (_accessToken && _isAuthorize) {
+router.beforeEach((to, from, next) => {
+	let _accessToken = store.state.auth.token!==''
+	if (to.matched.some(record => record.meta.requiresAuth) && _accessToken) {
 			next()
-		} else {
-			next({
-				path: '/signin',
-				query: { redirect: to.fullPath }
-			})
-		}
+	} else if ( to.path === '/' && _accessToken ) {
+		next({
+			path: '/dashboard',
+			query: { redirect: to.fullPath }
+		})
+	} else if(to.matched.some(record => record.meta.requiresAuth) && !_accessToken){
+		next({
+			path: '/',
+			query: { redirect: to.fullPath }
+		})
 	} else {
-		if (pageWhiteList.indexOf(to.path) !== -1) {
-			next()
-		} else {
-			if (to.path !== '/signin') {
-				next()
-			}
-		}
+		next();
 	}
 })
 
-router.afterEach((to, from) => {
 
-})
-*/
+
 
 export { router };

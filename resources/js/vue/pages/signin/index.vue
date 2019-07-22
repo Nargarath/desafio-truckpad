@@ -1,5 +1,5 @@
 <template>
-  <a-row type="flex" justify="space-around" align="middle" class="height-100vh">
+  <a-row type="flex" justify="space-around" align="middle" class="h-100v">
     <a-col :span="5">
       <a-form
         id="form"
@@ -126,9 +126,6 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.height-100vh{
-  height: 100vh;
-}
 #form {
   .login-form {
     max-width: 300px;

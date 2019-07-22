@@ -14,8 +14,6 @@ const vuexLocalStorage = new VuexPersist({
     })
 })
 
-
-  
 export default new Vuex.Store({
     plugins: [vuexLocalStorage.plugin],
     modules: {

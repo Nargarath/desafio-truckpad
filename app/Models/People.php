@@ -23,7 +23,8 @@ class People extends Model
 
     protected $fillable = [
         'name',
-        'birth_date'
+        'birth_date',
+        'active'
     ];
 
     /**

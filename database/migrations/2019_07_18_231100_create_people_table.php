@@ -17,6 +17,7 @@ class CreatePeopleTable extends Migration
             $table->bigIncrements('id');
             $table->string('name');
             $table->date('birth_date')->nullable();
+            $table->boolean('active')->default(true);
             $table->softDeletes();
             $table->timestamps();
         });

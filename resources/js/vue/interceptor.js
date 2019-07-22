@@ -17,10 +17,9 @@ axios.defaults.timeout = 5000
  * Config
  */
 axios.interceptors.request.use(config => {
-	let credential = store.state.credential
-	let isAuthorize = store.state.isAuthorize
-	if (credential && isAuthorize) {
-		config.headers.common['Authorization'] = 'Bearer ' + credential
+	let token = store.state.auth.token
+	if (token) {
+		config.headers.common['Authorization'] = 'Bearer ' + token
 	}
 	return config
 }, error => {

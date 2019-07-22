@@ -1,15 +1,16 @@
 <template>
     <a-table :columns="columns"
-    :rowKey="record => record.login.uuid"
+    :rowKey="record => record.id"
     :dataSource="data"
     :pagination="pagination"
     :loading="loading"
     @change="handleTableChange"
+    bordered
   >
-    <template slot="name" slot-scope="name">
-      {{name.first}} {{name.last}}
+    <template slot="birth_date" slot-scope="birth_date">
+      {{ birth_date | formatDate }}
     </template>
-    <span slot="action" slot-scope="text, record">
+    <span slot="action" >
       <a href="javascript:;">Detalhes</a>
       <a-divider type="vertical" />
       <a href="javascript:;">Edit</a>
@@ -31,15 +32,17 @@ const columns = [
   {
     title: 'Aniversário',
     dataIndex: 'birth_date',
+    sorter: true,
     width: '20%',
+    scopedSlots: { customRender: 'birth_date' },
   },
   {
-    title: 'Action',
+    title: '',
     key: 'action',
     scopedSlots: { customRender: 'action' },
   }
 ];
-
+import ApiService from "../../../services/api.service"
 export default {
   mounted() {
     this.fetch();
@@ -69,6 +72,19 @@ export default {
     fetch (params = {}) {
       console.log('params:', params);
       this.loading = true
+      	ApiService
+				.get('people.datatable',{
+          ...params,
+        })
+				.then(({data}) => {
+          console.log(data);
+          this.data = data.data;
+          this.loading = false;
+					resolve(data);
+				})
+				.catch(error => {
+					reject(error);
+				})
       /*
       reqwest({
         url: 'https://randomuser.me/api',

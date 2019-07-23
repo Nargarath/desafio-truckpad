@@ -23,91 +23,64 @@ const routes =  [
 	{
 		path: '/dashboard', 
 		component: dashboard, 
-		name: 'dashboard.index',
+		name: 'dashboard',
 		meta: {
 			requiresAuth: true
 		},
 		children: [
-			{ path: '/', component: people },
+			{ path: '/dashboard/people', component: people, name:'dashboard.people.index' },
 		]
 	}
 ];
 
 const router = new VueRouter({
-    routes 
+	linkActiveClass: 'ant-menu-item-selected',
+	routes
 })
 
 
 router.beforeEach((to, from, next) => {
 	const _accessToken = store.state.auth.token;
-
+	const redirectIfNotInHome = function (next,to,route){
+		if(to.path !== '/') {
+			next()
+		} else {
+			next({
+				path: route,
+				query: { redirect: to.fullPath }
+			})
+		}
+	}
+	const redirectIfInHome = function (next,to,route){
+		if(to.path === '/') {
+			next()
+		} else {
+			next({
+				path: route,
+				query: { redirect: to.fullPath }
+			})
+		}
+	}
 	if( _accessToken ) {
 		store.dispatch(JWT_REFRESH)
 		.then(
 			data => {
 				store.commit(SET_TOKEN,data);
-				if(to.path !== '/') {
-					next()
-				} else {
-					next({
-						path: '/dashboard',
-						query: { redirect: to.fullPath }
-					})
-				}
+				redirectIfNotInHome(next,to,'/dashboard/people')
 			}
 		)
 		.catch(
 			error => {
 				store.commit(SET_TOKEN,{token: ''});
-				if(to.path !== '/') {
-					next({
-						path: '/',
-						query: { redirect: to.fullPath }
-					})
-				}else{
-					next()
-				}
+				redirectIfInHome(next,to,'/')
 			}
 		)
 	} else {
-		if(to.path !== '/') {
-			next({
-				path: '/',
-				query: { redirect: to.fullPath }
-			})
-		} else {
-			next()
-		}
+		redirectIfInHome(next,to,'/')
 	}
 	
-			
-			
+		
 	}
 );
-	/*
-	if (to.matched.some(record => record.meta.requiresAuth) && _accessToken) {
-		store.dispatch(JWT_REFRESH).then(
-			data => {
-				store.commit(SET_TOKEN,data);
-			}
-		);
-		next()
-	} else if ( to.path === '/' && _accessToken ) {
-		next({
-			path: '/dashboard',
-			query: { redirect: to.fullPath }
-		})
-	} else if(to.matched.some(record => record.meta.requiresAuth) && !_accessToken){
-		next({
-			path: '/',
-			query: { redirect: to.fullPath }
-		})
-	} else {
-		next();
-	}
-	*/
-
-
-
 
 export { router };

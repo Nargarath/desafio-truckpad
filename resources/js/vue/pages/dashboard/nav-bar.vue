@@ -6,10 +6,10 @@
 	>
 		<div class="logo" />
 		<a-menu theme="dark" mode="inline" :defaultSelectedKeys="['1']">
-			<a-menu-item key="1">
+			<router-link :to="{ name: 'dashboard.people.index'}" tag="li" role="menuitem" style="padding-left: 24px;" class="ant-menu-item">
 				<a-icon type="user" />
 				<span>Pessoas</span>
-			</a-menu-item>
+			</router-link>
 		</a-menu>
 	</a-layout-sider>
 </template>

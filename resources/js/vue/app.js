@@ -18,6 +18,12 @@ Vue.mixin(globalHelpers)
 Vue.filter('formatDate', function (value) { 
 	return moment(value).format('DD/MM/YYYY');
 })
+Vue.filter('sortOrder', function (value) { 
+	if(value === 'ascend') {
+		return 'asc'
+	}
+	return 'desc'
+})
 
 const app = new Vue({
 	el: '#app',

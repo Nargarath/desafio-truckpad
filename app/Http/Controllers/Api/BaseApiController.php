@@ -101,15 +101,17 @@ class BaseApiController extends Controller
     {
         extract($request->all());
         
-        $datatable = $this->resourceType::orderBy($order_by??'id', $order_type??'desc');
+        $datatable = $this->resourceType::orderBy($sortField??'id', $sortOrder??'desc');
+        
         
 
-        if (!empty($search))
+        if (!empty($search) && $search !== '{}')
         {
-            $datatable = $datatable->where($searchable,'like',"%$search%");
+            $search = json_decode($search,true);
+            $datatable = $datatable->where($search['searchable'],'like',"%".$search['search']."%");
         }
         
         
-        return $datatable->paginate($limit??10);
+        return $datatable->paginate($results??10);
     }
 }

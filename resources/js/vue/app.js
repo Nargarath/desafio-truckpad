@@ -24,6 +24,9 @@ Vue.filter('sortOrder', function (value) {
 	}
 	return 'desc'
 })
+Vue.filter('deletePhrase', function (value) { 
+	return `Are you sure to delete '${value}' record?`
+})
 
 const app = new Vue({
 	el: '#app',

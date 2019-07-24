@@ -3,6 +3,8 @@ import VueRouter from "vue-router"
 import signIn from './pages/signin/index'
 import dashboard from './pages/dashboard/index'
 import people from './pages/dashboard/people/index'
+import peopleForm from './pages/dashboard/people/form'
+
 import store from './store'
 import { JWT_REFRESH } from './store/modules/auth/actions.type';
 import { SET_TOKEN } from './store/modules/auth/mutations.type';
@@ -28,7 +30,12 @@ const routes =  [
 			requiresAuth: true
 		},
 		children: [
-			{ path: '/dashboard/people', component: people, name:'dashboard.people.index' },
+			{ 
+				path: '/dashboard/people', component: people, name:'dashboard.people.index',
+			},
+			{ 
+				path: '/dashboard/people/:id', component: peopleForm, name:'dashboard.people.operation'
+			}
 		]
 	}
 ];

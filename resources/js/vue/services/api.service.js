@@ -3,9 +3,9 @@ import axios from "../interceptor";
 
 const ApiService = {
 
-    get(route,params) 
+    get(route,params,uri = {} ) 
     {
-        return axios.get(window.route(route),params).catch(error => {
+        return axios.get(window.route(route,uri),params).catch(error => {
           throw new Error(`[TRUCKPAD] ApiService ${error}`);
         });
     },
@@ -13,19 +13,19 @@ const ApiService = {
     {
         return axios.post(window.route(route),params);
     },
-    put(route,params) 
+    put(route,params,uri) 
     {
-        return axios.put(window.route(route),params);
+        return axios.put(window.route(route,uri),params);
     },
     
-    patch(route, params)
+    patch(route, params, uri)
     {
-        return axios.patch(window.route(route),params);
+        return axios.patch(window.route(route,uri),params);
     },
     
-    delete(route) 
+    delete(route,uri) 
     {
-        return axios.delete(window.route(route)).catch(error => {
+        return axios.delete(window.route(route,uri)).catch(error => {
           throw new Error(`[TRUCKPAD] ApiService ${error}`);
         });
     }

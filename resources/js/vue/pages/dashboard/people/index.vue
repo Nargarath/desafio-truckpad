@@ -43,7 +43,11 @@
       </a-col>
       <a-col :sm="24" :md="12">
         <div class="buttom-create">
-          <a-button icon="plus" type="primary"></a-button>
+          <router-link :to="{ path: '/dashboard/people/create'}">
+            <a-button icon="plus" type="primary"></a-button>
+          </router-link>
+
+          
         </div>
       </a-col>
     </a-row>
@@ -86,9 +90,17 @@
       <span slot="action" slot-scope="action">
         <a-button shape="circle" icon="eye" />
         <a-divider type="vertical" />
-        <a-button shape="circle" icon="form" type="primary" />
+        <router-link :to="{ path: `/dashboard/people/${action.id}`}">
+          <a-button shape="circle" icon="form" type="primary" />
+        </router-link>
         <a-divider type="vertical" />
-        <a-button shape="circle" icon="delete" type="danger" />
+        <a-popconfirm placement="topRight" okText="Yes" cancelText="No" @confirm="confirm(action.id)">
+          <template slot="title">
+            <p>{{action.name | deletePhrase}}</p>
+          </template>
+          <a-button shape="circle" icon="delete" type="danger" />
+        </a-popconfirm>
+        
       </span>
     </a-table>
   </div>
@@ -220,6 +232,9 @@ export default {
         search: '',
         searchable: ''
       });
+    },
+    confirm(id) {
+      ApiService.delete('people.delete',{id});
     }
   },
 }

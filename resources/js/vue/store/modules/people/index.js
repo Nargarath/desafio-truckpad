@@ -13,14 +13,21 @@ import {
 const state = {
   pagination: {
 
-  }
+	},
+	selected: {
+
+	}
 };
 
 const getters = {
   pagination(state)
   {
-    return state.pagination;
-  }
+    return state.pagination
+	},
+	selected(state)
+	{
+		return state.selected
+	}
 };
 
 const actions = {
@@ -37,13 +44,17 @@ const actions = {
 					reject(error);
 				})
 		});
-	},
+	}
 };
 
 const mutations = {
 	[SET_PEOPLE_PAGINATION](state,data)
 	{
 		state.pagination = data;
+	},
+	[SET_PEOPLE_SELECTED](state,data)
+	{
+		state.selected = data;
 	}
 };
 

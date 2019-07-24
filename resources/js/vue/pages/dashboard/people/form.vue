@@ -1,57 +1,60 @@
 <template>
 	<div>
-    <a-form
+		<div class="title">
+			<h2>Fulano</h2>
+			<a-button shape="circle" icon="edit" />
+		</div>
+		<a-form
+				:layout="formLayout"
 				:form="form"
 				@submit="handleSubmit"
 			>
+			<a-row :gutter="24">
+			<a-col
+				:span="12"
+			>
 			<a-form-item
-				label="Note"
-				:label-col="{ span: 5 }"
-				:wrapper-col="{ span: 12 }"
+				label="Name"
+				:label-col="{ span: 2 }"
+				:wrapper-col="{ span: 19 }"
 			>
 				<a-input
 					v-decorator="[
-						'note',
+						'name',
 						{rules: [{ required: true, message: 'Please input your note!' }]}
 					]"
 				/>
 			</a-form-item>
+			</a-col>
+			<a-col
+				:span="12"
+			>			
 			<a-form-item
-				label="Gender"
-				:label-col="{ span: 5 }"
-				:wrapper-col="{ span: 12 }"
+				label="Birthday"
+				:label-col="{ span: 3 }"
+				:wrapper-col="{ span: 19 }"
+				:style="{ position: 'relative' }"
 			>
-				<a-select
-					v-decorator="[
-						'gender',
-						{rules: [{ required: true, message: 'Please select your gender!' }]}
-					]"
-					placeholder="Select a option and change input text above"
-					@change="handleSelectChange"
-				>
-					<a-select-option value="male">
-						male
-					</a-select-option>
-					<a-select-option value="female">
-						female
-					</a-select-option>
-				</a-select>
+				<a-date-picker style="width: 100%" />
 			</a-form-item>
-			<a-form-item
-				:wrapper-col="{ span: 12, offset: 5 }"
-			>
-				<a-button
-					type="primary"
-					html-type="submit"
-				>
-					Submit
-				</a-button>
-			</a-form-item>
+			</a-col>
+			</a-row>
 		</a-form>
 	</div>
 </template>
 <script>
 export default {
+		props: {
+			people: {
+				type: Object,
+				required: false
+			},
+			editing: {
+				type: Boolean,
+				required: false,
+				default: false
+			}
+		},
     data(){
 			return {
 				formLayout: 'horizontal',

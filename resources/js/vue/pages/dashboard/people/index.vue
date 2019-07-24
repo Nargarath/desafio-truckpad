@@ -1,5 +1,9 @@
 <template>
   <div>
+    <div class="title">
+      <a-icon type="user" />
+      <h1>Pessoas</h1>
+    </div>
     <a-row justify='space-between'>
       <a-col :sm="24" :md="12">
         <a-form
@@ -7,21 +11,21 @@
           layout="inline"
           @submit="handleSearchSubmit"
         >
-        <a-form-item label="Search">
+        <a-form-item label="Busca">
           <a-input 
             v-decorator="[
               'search',
-              {rules: [{ required: true, message: 'Please input the text you are searching!' }]}
+              {rules: [{ required: true, message: 'Por favor, digite o que você está procurando!' }]}
             ]"
-          placeholder="something" />
+          placeholder="digite algo" />
         </a-form-item>
-        <a-form-item label="Column">
+        <a-form-item label="Coluna">
           <a-select
             v-decorator="[
               'searchable',
-              {rules: [{ required: true, message: 'Please select the column to search!' }]}
+              {rules: [{ required: true, message: 'Por favor, selecione a coluna que deseja buscar!' }]}
             ]"
-            placeholder="column to search"
+            placeholder="coluna a procurar"
           >
             <a-select-option :value="search.searchable" v-for="search in searchables" :key="search.searchable" @click="selectSearch(search)">
               {{search.searchable}}
@@ -32,12 +36,12 @@
         <a-form-item
           :wrapper-col="{ span: 12, offset: 6 }"
         >
-          <a-button icon="search" html-type="submit">Search</a-button>
+          <a-button icon="search" html-type="submit">Buscar</a-button>
         </a-form-item>
         <a-form-item
           :wrapper-col="{ span: 12, offset: 6 }"
         >
-          <a-button icon="delete" @click="cleanForm" type="danger">Clean</a-button>
+          <a-button icon="delete" @click="cleanForm" type="danger">Limpar</a-button>
         </a-form-item>
       </a-form>
       </a-col>
@@ -88,9 +92,11 @@
         {{ birth_date | formatDate }}
       </template>
       <span slot="action" slot-scope="action">
-        <a-button shape="circle" icon="eye" />
+				<router-link :to="{ name: `dashboard.people.operation`,params: {id: action.id}}">
+					<a-button shape="circle" icon="eye" />
+				</router-link>
         <a-divider type="vertical" />
-        <router-link :to="{ path: `/dashboard/people/${action.id}`}">
+        <router-link :to="{ name: `dashboard.people.operation`,params: {id: action.id}}">
           <a-button shape="circle" icon="form" type="primary" />
         </router-link>
         <a-divider type="vertical" />
@@ -103,12 +109,15 @@
         
       </span>
     </a-table>
+		<div class="people-view">
+			<router-view></router-view>
+		</div>
   </div>
 </template>
 <script>
 const columns = [
   {
-    title: 'Nome',
+    title: 'Name',
     dataIndex: 'name',
     sorter: true,
     key: 'name',
@@ -128,7 +137,7 @@ const columns = [
     },
   },
   {
-    title: 'Aniversário',
+    title: 'Birthday',
     dataIndex: 'birth_date',
     sorter: true,
     key: 'birth_date',
@@ -173,9 +182,11 @@ export default {
   },
   methods: {
     handleTableChange (pagination, filters, sorter) {
+      
       const pager = { ...this.pagination };
       pager.current = pagination.current;
       this.pagination = pager;
+      this.pagination.pageSize = pagination.pageSize;
       this.sorter = sorter;
       this.fetch({
         results: pagination.pageSize,
@@ -223,7 +234,7 @@ export default {
       this.searchForm.validateFields((err, values) => {
         if (!err) {
           this.searchSelected = values;
-          this.handleTableChange({results: 10,page: this.pagination.current}, this.searchSelected, this.sorter)
+          this.forceTableUpdate();
         }
       });
     },
@@ -232,10 +243,23 @@ export default {
         search: '',
         searchable: ''
       });
+      this.searchSelected = this.searchForm.getFieldsValue();
+      this.forceTableUpdate();
     },
     confirm(id) {
-      ApiService.delete('people.delete',{id});
-    }
+			ApiService.delete('people.delete',{id}).then(
+				() => {
+					this.forceTableUpdate();
+				}
+			);
+			
+		},
+		forceTableUpdate(){
+			if(!this.pagination.pageSize){
+        this.pagination.pageSize = 10;
+      }
+      this.handleTableChange(this.pagination, this.searchSelected, this.sorter)
+		}
   },
 }
 </script>
@@ -247,7 +271,7 @@ export default {
   height: 65px;
 }
 [role="combobox"]{
-  width: 150px;
+  width: 155px;
 }
 .ant-form-inline{
   margin-bottom: 1rem;
@@ -259,5 +283,33 @@ export default {
   display: flex;
   align-items: center;
   justify-content: flex-end;
+}
+.title{
+    font-size: 14px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    color: #373737;
+    margin-bottom: 1rem;
+    & > .anticon{
+      font-size: 24px;
+      margin-right: .5rem;
+    }
+    & > .ant-btn{
+      width: 25px;
+      height: 25px;
+      margin-left: .5rem;
+    }
+    h1{
+      margin-bottom: 0;
+    }
+    h2{
+      margin-bottom: 0;
+    }
+}
+.people-view{
+	margin-top: 1rem;
+	border-top: 1px dotted #dee2e6;
+	padding-top: 2rem;
 }
 </style>

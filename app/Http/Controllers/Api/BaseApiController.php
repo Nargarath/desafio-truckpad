@@ -103,9 +103,7 @@ class BaseApiController extends Controller
         
         $datatable = $this->resourceType::orderBy($sortField??'id', $sortOrder??'desc');
         
-        
-
-        if (!empty($search) && $search !== '{}')
+        if (!empty($search) && $search !== '{}' && $search !== '{"search":"","searchable":""}')
         {
             $search = json_decode($search,true);
             $datatable = $datatable->where($search['searchable'],'like',"%".$search['search']."%");

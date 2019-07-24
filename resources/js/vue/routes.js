@@ -32,10 +32,11 @@ const routes =  [
 		children: [
 			{ 
 				path: '/dashboard/people', component: people, name:'dashboard.people.index',
-			},
-			{ 
-				path: '/dashboard/people/:id', component: peopleForm, name:'dashboard.people.operation'
+				children: [
+					{ path: '/dashboard/people/:id', component: peopleForm, name:'dashboard.people.operation' },
+				]
 			}
+			
 		]
 	}
 ];

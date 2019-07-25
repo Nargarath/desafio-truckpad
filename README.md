@@ -59,9 +59,10 @@ cp .env.example .env
 
 Aqui é onde vai ser definido as configurações básicas para funcionamento dos softwares ligados ao projeto. No caso, só estamos utilizando o banco de dados sql e o proprio laravel, por tanto, configurar todas as variáveis que iniciarem com 'DB_'.
 
-```bash
-Recomendação: Pra database usar, de preferencia, o postgres que tem suporte fácil à JSON. Se for usar MySQL, usar o mariadb a partir da versão: 10.4.6
-```
+#### Recomendação:
+
+Pra database usar, de preferencia, o postgres que tem suporte fácil à JSON. Se for usar MySQL, usar o mariadb a partir da versão: 10.4.6
+
 
 ### 5 - Gerar chave de encriptação do laravel e do JWT 
 

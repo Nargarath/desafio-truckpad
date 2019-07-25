@@ -7,12 +7,27 @@ import { router } from './routes'
 import store from './store'
 import { sync } from 'vuex-router-sync'
 import globalHelpers from './helpers/global'
-
+import VueScrollTo from 'vue-scrollto';
 
 Vue.config.productionTip = false
 
 sync(store, router)
 Vue.use(VueEvents)
+
+Vue.use(VueScrollTo, {
+	container: "body",
+	duration: 500,
+	easing: "ease",
+	offset: 0,
+	force: true,
+	cancelable: true,
+	onStart: false,
+	onDone: false,
+	onCancel: false,
+	x: false,
+	y: true
+})
+
 Vue.mixin(globalHelpers)
 
 Vue.filter('formatDate', function (value) { 

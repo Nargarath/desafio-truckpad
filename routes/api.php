@@ -37,3 +37,10 @@ Route::group([
     Route::delete('{id}', 'PeopleController@delete')->name('people.delete');
 });
 
+Route::group([
+    'middleware'    => 'auth:api',
+    'prefix'        => 'address',
+    'namespace'     => 'Api'
+], function ($router) {
+    Route::get('find/{postal}', 'AddressController@getAddressByPostalCode')->name('address.find.external');
+});

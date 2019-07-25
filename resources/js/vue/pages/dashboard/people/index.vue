@@ -1,115 +1,124 @@
 <template>
   <div>
-    <div class="title">
-      <a-icon type="user" />
-      <h1>Pessoas</h1>
-    </div>
-    <a-row justify='space-between'>
-      <a-col :sm="24" :md="12">
-        <a-form
-          :form="searchForm"
-          layout="inline"
-          @submit="handleSearchSubmit"
-        >
-        <a-form-item label="Busca">
-          <a-input 
-            v-decorator="[
-              'search',
-              {rules: [{ required: true, message: 'Por favor, digite o que você está procurando!' }]}
-            ]"
-          placeholder="digite algo" />
-        </a-form-item>
-        <a-form-item label="Coluna">
-          <a-select
-            v-decorator="[
-              'searchable',
-              {rules: [{ required: true, message: 'Por favor, selecione a coluna que deseja buscar!' }]}
-            ]"
-            placeholder="coluna a procurar"
-          >
-            <a-select-option :value="search.searchable" v-for="search in searchables" :key="search.searchable" @click="selectSearch(search)">
-              {{search.searchable}}
-            </a-select-option>
-          </a-select>
-        </a-form-item>
-        
-        <a-form-item
-          :wrapper-col="{ span: 12, offset: 6 }"
-        >
-          <a-button icon="search" html-type="submit">Buscar</a-button>
-        </a-form-item>
-        <a-form-item
-          :wrapper-col="{ span: 12, offset: 6 }"
-        >
-          <a-button icon="delete" @click="cleanForm" type="danger">Limpar</a-button>
-        </a-form-item>
-      </a-form>
-      </a-col>
-      <a-col :sm="24" :md="12">
-        <div class="buttom-create">
-          <router-link :to="{ path: '/dashboard/people/create'}">
-            <a-button icon="plus" type="primary"></a-button>
-          </router-link>
-
-          
-        </div>
-      </a-col>
-    </a-row>
-     
-  
-    <a-table :columns="columns"
-    :rowKey="record => record.id"
-    :dataSource="data"
-    :pagination="pagination"
-    :loading="loading"
-    @change="handleTableChange"
-    :scroll="{ x: 400}"
-    bordered
-    >
-      <div slot="filterDropdown" slot-scope="{ setSelectedKeys, selectedKeys, confirm, clearFilters, column }" class='custom-filter-dropdown'>
-        <a-input
-          v-ant-ref="c => searchInput = c"
-          :placeholder="`Search ${column.dataIndex}`"
-          :value="selectedKeys[0]"
-          @change="e => setSelectedKeys(e.target.value ? [e.target.value] : [])"
-          @pressEnter="() => handleSearch(selectedKeys, confirm)"
-          style="width: 188px; margin-bottom: 8px; display: block;"
-        />
-        <a-button
-          type='primary'
-          @click="() => handleSearch(selectedKeys, confirm)"
-          icon="search"
-          size="small"
-          style="width: 90px; margin-right: 8px"
-        >Search</a-button>
-        <a-button
-          @click="() => handleReset(clearFilters)"
-          size="small"
-          style="width: 90px"
-        >Reset</a-button>
+    <div id="people-datatable" v-show="!isOperating">
+      <div class="title">
+        <a-icon type="user" />
+        <h1>Pessoas</h1>
       </div>
-      <template slot="birth_date" slot-scope="birth_date">
-        {{ birth_date | formatDate }}
-      </template>
-      <span slot="action" slot-scope="action">
-				<router-link :to="{ name: `dashboard.people.operation`,params: {id: action.id}}">
-					<a-button shape="circle" icon="eye" />
-				</router-link>
-        <a-divider type="vertical" />
-        <router-link :to="{ name: `dashboard.people.operation`,params: {id: action.id}}">
-          <a-button shape="circle" icon="form" type="primary" />
-        </router-link>
-        <a-divider type="vertical" />
-        <a-popconfirm placement="topRight" okText="Yes" cancelText="No" @confirm="confirm(action.id)">
-          <template slot="title">
-            <p>{{action.name | deletePhrase}}</p>
-          </template>
-          <a-button shape="circle" icon="delete" type="danger" />
-        </a-popconfirm>
-        
-      </span>
-    </a-table>
-		<div class="people-view">
+      <a-row justify='space-between'>
+        <a-col :sm="24" :md="12">
+          <a-form
+            :form="searchForm"
+            layout="inline"
+            @submit="handleSearchSubmit"
+          >
+          <a-form-item 
+            label="Busca"
+				    >
+            <a-input 
+              v-decorator="[
+                'search',
+                {rules: [{ required: true, message: 'Por favor, digite o que você está procurando!' }]}
+              ]"
+            placeholder="digite algo"
+            style="width: 100%"
+            
+             />
+          </a-form-item>
+          <a-form-item label="Coluna">
+            <a-select
+              v-decorator="[
+                'searchable',
+                {rules: [{ required: true, message: 'Por favor, selecione a coluna que deseja buscar!' }]}
+              ]"
+              placeholder="coluna a procurar"
+              style="width:200px"
+            >
+              <a-select-option :value="search.searchable" v-for="search in searchables" :key="search.searchable" @click="selectSearch(search)">
+                {{search.searchable}}
+              </a-select-option>
+            </a-select>
+          </a-form-item>
+          
+          <a-form-item
+            :wrapper-col="{ span: 12, offset: 6 }"
+          >
+            <a-button icon="search" html-type="submit">Buscar</a-button>
+          </a-form-item>
+          <a-form-item
+            :wrapper-col="{ span: 12, offset: 6 }"
+          >
+            <a-button icon="delete" @click="cleanForm" type="danger">Limpar</a-button>
+          </a-form-item>
+        </a-form>
+        </a-col>
+        <a-col :sm="24" :md="12">
+          <div class="buttom-create">
+            <router-link :to="{ name: `dashboard.people.operation`,params: {id: 'create'}}" v-scroll-to="'#view'">
+              <a-button icon="plus" type="primary" @click="setPeople({},true)" ></a-button>
+            </router-link>
+
+            
+          </div>
+        </a-col>
+      </a-row>
+      
+    
+      <a-table :columns="columns"
+      :rowKey="record => record.id"
+      :dataSource="data"
+      :pagination="pagination"
+      :loading="loading"
+      @change="handleTableChange"
+      :scroll="{ x: 400}"
+      bordered
+      >
+        <div slot="filterDropdown" slot-scope="{ setSelectedKeys, selectedKeys, confirm, clearFilters, column }" class='custom-filter-dropdown'>
+          <a-input
+            v-ant-ref="c => searchInput = c"
+            :placeholder="`Search ${column.dataIndex}`"
+            :value="selectedKeys[0]"
+            @change="e => setSelectedKeys(e.target.value ? [e.target.value] : [])"
+            @pressEnter="() => handleSearch(selectedKeys, confirm)"
+            style="width: 188px; margin-bottom: 8px; display: block;"
+          />
+          <a-button
+            type='primary'
+            @click="() => handleSearch(selectedKeys, confirm)"
+            icon="search"
+            size="small"
+            style="width: 90px; margin-right: 8px"
+          >Search</a-button>
+          <a-button
+            @click="() => handleReset(clearFilters)"
+            size="small"
+            style="width: 90px"
+          >Reset</a-button>
+        </div>
+        <template slot="birth_date" slot-scope="birth_date">
+          {{ birth_date | formatDate }}
+        </template>
+        <span slot="action" slot-scope="action">
+          <router-link :to="{ name: `dashboard.people.operation`,params: {id: action.id}}">
+            <a-button shape="circle" icon="eye" @click="setPeople(action,false)" />
+          </router-link>
+          <a-divider type="vertical" />
+          <router-link :to="{ name: `dashboard.people.operation`,params: {id: action.id}}" >
+            <a-button shape="circle" icon="form" type="primary" @click="setPeople(action,true)"/>
+          </router-link>
+          <a-divider type="vertical" />
+          <a-popconfirm placement="topRight" okText="Yes" cancelText="No" @confirm="confirm(action.id)">
+            <template slot="title">
+              <p>{{action.name | deletePhrase}}</p>
+            </template>
+            <a-button shape="circle" icon="delete" type="danger" />
+          </a-popconfirm>
+          
+        </span>
+      </a-table>
+    </div>
+    
+		<div class="people-view" id="view" v-show="isOperating">
 			<router-view></router-view>
 		</div>
   </div>
@@ -151,7 +160,13 @@ const columns = [
     scopedSlots: { customRender: 'action' },
   }
 ];
+import { mapGetters, mapMutations } from "vuex";
 import ApiService from "../../../services/api.service"
+import {
+	SET_PEOPLE_EDITING,
+	SET_PEOPLE_SELECTED
+} from "../../../store/modules/people/mutations.type"
+
 export default {
   mounted() {
     this.fetch();
@@ -178,6 +193,11 @@ export default {
         field: ''
       }
 
+    }
+  },
+  computed: {
+    isOperating(){
+      return this.$route.name !== 'dashboard.people.index';
     }
   },
   methods: {
@@ -214,7 +234,7 @@ export default {
 					console.log(error);
 				})
     },
-    fixOrderName(value){
+    fixOrderName(value) {
       return this.$options.filters.sortOrder(value) 
     },
     handleSearch (selectedKeys, confirm) {
@@ -226,10 +246,10 @@ export default {
       clearFilters()
       this.searchText = ''
     },
-    selectSearch(searchObj){
+    selectSearch(searchObj) {
       this.searchSelected = searchObj;
     },
-    handleSearchSubmit(e){
+    handleSearchSubmit(e) {
       e.preventDefault();
       this.searchForm.validateFields((err, values) => {
         if (!err) {
@@ -238,7 +258,7 @@ export default {
         }
       });
     },
-    cleanForm(){
+    cleanForm() {
       this.searchForm.setFieldsValue({
         search: '',
         searchable: ''
@@ -254,12 +274,20 @@ export default {
 			);
 			
 		},
-		forceTableUpdate(){
+		forceTableUpdate() {
 			if(!this.pagination.pageSize){
         this.pagination.pageSize = 10;
       }
       this.handleTableChange(this.pagination, this.searchSelected, this.sorter)
-		}
+    },
+    ...mapMutations([
+      SET_PEOPLE_EDITING,
+      SET_PEOPLE_SELECTED
+    ]),
+    setPeople(people,editing) {
+      this[SET_PEOPLE_EDITING](editing)
+      this[SET_PEOPLE_SELECTED](people)
+    },
   },
 }
 </script>
@@ -269,9 +297,6 @@ export default {
 }
 .ant-table-row.ant-table-row-level-0{
   height: 65px;
-}
-[role="combobox"]{
-  width: 155px;
 }
 .ant-form-inline{
   margin-bottom: 1rem;
@@ -306,10 +331,8 @@ export default {
     h2{
       margin-bottom: 0;
     }
-}
-.people-view{
-	margin-top: 1rem;
-	border-top: 1px dotted #dee2e6;
-	padding-top: 2rem;
+    h3{
+      margin-bottom: 0;
+    }
 }
 </style>

@@ -12,4 +12,11 @@ class AddressController extends BaseApiController
     {
         $this->resourceType = Address::class;
     }
+
+    public function getAddressByPostalCode($postal) {
+        $client = new \GuzzleHttp\Client();
+        $response = $client->get("https://viacep.com.br/ws/$postal/json");
+        $body = $response->getBody();
+        return response()->json($body);
+    }
 }

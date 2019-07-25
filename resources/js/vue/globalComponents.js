@@ -1,5 +1,5 @@
 import Vue from "vue"
-import { Row, Col, Button, message, Form, Icon, Input, Checkbox, Alert, Menu, Layout,Table, Divider, Select, popconfirm, DatePicker } from 'ant-design-vue';
+import { Row, Col, Button, message, Form, Icon, Input, Checkbox, Alert, Menu, Layout,Table, Divider, Select, popconfirm, DatePicker, InputNumber } from 'ant-design-vue';
 Vue.prototype.$message = message
 
 Vue.component(Menu.name, Menu)
@@ -19,7 +19,7 @@ Vue.component(Table.name, Alert)
 Vue.component(Divider.name, Divider)
 Vue.component(popconfirm.name, popconfirm)
 Vue.component(DatePicker.name, DatePicker)
-
+Vue.component(InputNumber.name, InputNumber)
 
 Vue.use(Row)
 Vue.use(Col)
@@ -36,6 +36,6 @@ Vue.use(Divider)
 Vue.use(Select)
 Vue.use(popconfirm)
 Vue.use(DatePicker)
-
+Vue.use(InputNumber)
 
 export { Vue };

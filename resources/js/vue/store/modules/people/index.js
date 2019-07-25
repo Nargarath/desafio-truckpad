@@ -1,14 +1,16 @@
 
 
-import ApiService from "../../../services/api.service";
+import ApiService from "../../../services/api.service"
 
 import { 
   GET_PEOPLE_PAGINATION
-} from "./actions.type";
+} from "./actions.type"
 
 import {
-  SET_PEOPLE_PAGINATION
-} from "./mutations.type";
+	SET_PEOPLE_PAGINATION,
+	SET_PEOPLE_SELECTED,
+	SET_PEOPLE_EDITING
+} from "./mutations.type"
 
 const state = {
   pagination: {
@@ -16,23 +18,24 @@ const state = {
 	},
 	selected: {
 
-	}
-};
+	},
+	editing: false
+}
 
 const getters = {
-  pagination(state)
-  {
+  pagination(state) {
     return state.pagination
 	},
-	selected(state)
-	{
+	peopleSelected(state) {
 		return state.selected
+	},
+	editingPeople(state) {
+		return state.editing
 	}
-};
+}
 
 const actions = {
-	[GET_PEOPLE_PAGINATION]({commit},data)
-	{
+	[GET_PEOPLE_PAGINATION]({commit},data) {
 		return new Promise((resolve,reject) => {
 			ApiService
 				.get('people.datatable',data)
@@ -43,24 +46,25 @@ const actions = {
 				.catch(error => {
 					reject(error);
 				})
-		});
+		})
 	}
-};
+}
 
 const mutations = {
-	[SET_PEOPLE_PAGINATION](state,data)
-	{
+	[SET_PEOPLE_PAGINATION](state,data) {
 		state.pagination = data;
 	},
-	[SET_PEOPLE_SELECTED](state,data)
-	{
+	[SET_PEOPLE_SELECTED](state,data) {
 		state.selected = data;
+	},
+	[SET_PEOPLE_EDITING](state,data) {
+		state.editing = data;
 	}
-};
+}
 
 export default {
 	state,
 	getters,
 	actions,
 	mutations
-};
+}

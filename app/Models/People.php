@@ -17,7 +17,6 @@ class People extends Model
         SoftDeletes;
 
     protected $dates = [
-        'birth_date',
         'deleted_at'
     ];
 

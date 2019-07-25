@@ -247,7 +247,7 @@ export default {
 			return `document-${this.dataIndex}`;
 		},
 		addressData() {
-			if( !this.isEmpty(this.peopleSelected.address) && this.peopleSelected.address.length){
+			if( !this.isEmpty(this.peopleSelected.address) && this.peopleSelected.address.length > this.dataIndex-1) {
 				return this.peopleSelected.address[this.dataIndex-1]
 			} 
 			return []

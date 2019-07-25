@@ -115,11 +115,14 @@ export default {
               if(err.response.data.status === 'error'){
                 this.error.active = true;
                 this.error.message = err.response.data.error;
+                this.loading = false;
               }
             }
           );
+        } else {
+          this.loading = false;
         }
-        this.loading = false;
+        
       });
     },
   },

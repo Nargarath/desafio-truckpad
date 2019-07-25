@@ -27,15 +27,36 @@
 					v-decorator="[
 						'number',
 						{
-							rules: [{ required: true, message: 'Por favor, digite número de telefone!' }],
-							initialValue: getInternalDataIfNotNull(phoneData.number)
+							rules: [{ required: true, message: 'Por favor, digite seu número!' }],
+							initialValue: getInternalDataIfNotNull(phoneData.number) 
 						}
 					]"
+					style="width: 100%"
 					:disabled="disabled"
-					@change="(value) => {
-						this.onChangeInput('number',value);
-					}"
-				/>
+						@change="(value) => {
+							this.onChangeInput('number',value);
+						}"
+				>
+					<a-select
+						slot="addonBefore"
+						v-decorator="[
+							'prefix',
+							{ initialValue: getInternalDataIfNotNull(phoneData.prefix) }
+						]"
+						style="width: 70px"
+						:disabled="disabled"
+					>
+						<a-select-option value="11">
+							11
+						</a-select-option>
+						<a-select-option value="12">
+							12
+						</a-select-option>
+						<a-select-option value="84">
+							84
+						</a-select-option>
+					</a-select>
+				</a-input>
 			</a-form-item>
 		</a-form>
 	</div>
@@ -67,7 +88,7 @@ export default {
 			return `document-${this.dataIndex}`;
 		},
 		phoneData() {
-			if(!this.isEmpty(this.peopleSelected.phone) && this.peopleSelected.phone.length){
+			if(!this.isEmpty(this.peopleSelected.phone) && this.peopleSelected.phone.length > this.dataIndex-1){
 				return this.peopleSelected.phone[this.dataIndex-1]
 			} 
 			return []

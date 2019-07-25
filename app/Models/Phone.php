@@ -12,6 +12,7 @@ class Phone extends Model
         SoftDeletes;
         
     protected $fillable = [
+        'prefix',
         'number',
         'priority'
     ];

@@ -33,7 +33,8 @@ class PeopleTableSeeder extends Seeder
             'address_type' => \App\Models\Enums\AddressEnum::ADDRESS_TYPE_DELIVERY,
         ]);
         $people1->phone()->create([
-            'number' => '11999999999'
+            'prefix' => '84',
+            'number' => '999999999'
         ]);
         $people2 = \App\Models\People::create([
             'name' => 'teste2',
@@ -57,7 +58,8 @@ class PeopleTableSeeder extends Seeder
             'address_type' => \App\Models\Enums\AddressEnum::ADDRESS_TYPE_BILLING,
         ]);
         $people2->phone()->create([
-            'number' => '11999999999'
+            'prefix' => '11',
+            'number' => '999999999'
         ]);
         $people3 = \App\Models\People::create([
             'name' => 'teste3',
@@ -81,7 +83,8 @@ class PeopleTableSeeder extends Seeder
             'address_type' => \App\Models\Enums\AddressEnum::ADDRESS_TYPE_BILLING,
         ]);
         $people3->phone()->create([
-            'number' => '11999999999'
+            'prefix' => '12',
+            'number' => '999999999'
         ]);
     }
 }

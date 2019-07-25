@@ -115,7 +115,6 @@ O sistema tem um usuário padrão no admin que é inserido pela seed, para usa-l
 ```
 Login: admin@email.com
 Password: secret
-
 ```
 
 ## Em produção:
@@ -124,7 +123,6 @@ A aplicação está rodando em produção para agilizar o processo de validaçã
 
 ```
 http://truckpad-challange.herokuapp.com/
-
 ```
 
 

@@ -1,6 +1,6 @@
 <template>
   <a-row type="flex" justify="space-around" align="middle" class="h-100v">
-    <a-col :span="5">
+    <a-col :md="8" :lg="5">
       <a-form
         id="form"
         :form="form"

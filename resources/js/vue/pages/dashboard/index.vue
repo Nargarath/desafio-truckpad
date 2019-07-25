@@ -3,11 +3,19 @@
     <nav-bar :collapsed="collapsed"/>
     <a-layout>
       <a-layout-header style="background: #fff; padding: 0">
-        <a-icon
-          class="trigger"
-          :type="collapsed ? 'menu-unfold' : 'menu-fold'"
-          @click="()=> collapsed = !collapsed"
-        />
+        <a-row>
+          <a-col :span="12">
+            <a-icon
+              class="trigger"
+              :type="collapsed ? 'menu-unfold' : 'menu-fold'"
+              @click="()=> collapsed = !collapsed"
+            />
+          </a-col>
+          <a-col :span="12" align="end">
+            <a-button type="danger" shape="circle" icon="logout" class="logout" @click="logout()"></a-button>
+          </a-col>
+        </a-row>
+        
       </a-layout-header>
       <a-layout-content :style="{ margin: '24px 16px', padding: '24px', background: '#fff', minHeight: '280px' }">
         <router-view></router-view>
@@ -24,22 +32,25 @@ export default {
     NavBar
   },
   data(){
-
     return {
         loading: false,
         collapsed: false
       }
-    },
-    beforeCreate () {
+  },
+  beforeCreate () {
       this.form = this.$form.createForm(this);
-    },
-    computed:{
-      ...mapGetters(["token"])
-    },
-    methods: {
-      ...mapActions([JWT_LOGOUT]),
-    },
-  }
+  },
+  computed:{
+    ...mapGetters(["token"])
+  },
+  methods: {
+    ...mapActions([JWT_LOGOUT]),
+    logout() {
+      this[JWT_LOGOUT]();
+      this.$router.go({name:'login'});
+    }
+  },
+}
 </script>
 
 <style lang="scss" scoped>
@@ -53,6 +64,9 @@ export default {
       &:hover {
         color: #1890ff;
       }
+    }
+    .logout {
+      margin-right: 3rem;
     }
   }
 </style>

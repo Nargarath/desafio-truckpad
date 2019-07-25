@@ -17,7 +17,7 @@ class CreateDocumentsTable extends Migration
             $table->bigIncrements('id');
             $table->string('country')->nullable();
             $table->string('doc_type');
-            $table->integer('number')->unsigned()->index();
+            $table->unsignedBigInteger('number')->index();
             $table->json('additional_infos')->nullable();
 
             $table->unsignedBigInteger('people_id');

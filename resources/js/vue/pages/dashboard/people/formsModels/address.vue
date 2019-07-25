@@ -25,15 +25,15 @@
 			>
 				<a-select
 					v-decorator="[
-						'name',
+						'address_type',
 						{
 							rules: [{ required: true, message: 'por favor, selecione o tipo de endereço!' }],
-							initialValue: getInternalDataIfNotNull(addressData.name)
+							initialValue: getInternalDataIfNotNull(addressData.address_type)
 						}
 					]"
 					placeholder="selecione um tipo"
 					@change="(value) => {
-						this.onChangeInput('name',value);
+						this.onChangeInput('address_type',value);
 					}"
 					style="width: 100%"
 					:disabled="disabled"
@@ -46,7 +46,25 @@
 					</a-select-option>
 				</a-select>
 			</a-form-item>
-				<a-form-item
+			<a-form-item
+				label="Relação (casa,trabalho...)"
+				:span="12"
+			>
+				<a-input
+					v-decorator="[
+						'name',
+						{
+							rules: [{ required: true, message: 'Por favor, digite qual é a Relação desse endereço!' }],
+							initialValue: getInternalDataIfNotNull(addressData.name)
+						}
+					]"
+					:disabled="disabled"
+					@change="(value) => {
+						this.onChangeInput('name',value);
+					}"
+				/>
+			</a-form-item>
+			<a-form-item
 				label="CEP"
 				:span="12"
 				@change="(value) => {

@@ -5,14 +5,30 @@
 				:form="form"
 				@submit="handleSubmit"
 			>
-			
+			<a-form-item>
+				<a-input
+					v-decorator="[
+						'id',
+						{
+							initialValue: getInternalDataIfNotNull(documentData.id)
+						}
+					]"
+					@change="(value) => {
+						this.onChangeInput('id',value);
+					}"
+					type="hidden"
+				/>
+			</a-form-item>
 			<a-form-item
 				label="Tipo de documento"
 			>
 				<a-select
 					v-decorator="[
 						'doc_type',
-						{rules: [{ required: true, message: 'por favor, selecione o tipo de documento!' }]}
+						{
+							rules: [{ required: true, message: 'por favor, selecione o tipo de documento!' }],
+							initialValue: getInternalDataIfNotNull(documentData.doc_type)
+						}
 					]"
 					placeholder="selecione um tipo"
 					@change="(value) => {
@@ -37,7 +53,10 @@
 				<a-input
 					v-decorator="[
 						'number',
-						{rules: [{ required: true, message: 'Por favor, digite o número do documento!' }]}
+						{
+							rules: [{ required: true, message: 'Por favor, digite o número do documento!' }],
+							initialValue: getInternalDataIfNotNull(documentData.number)
+						}
 					]"
 					:disabled="disabled"
 					@change="(value) => {
@@ -51,7 +70,10 @@
 				<a-input
 					v-decorator="[
 						'country',
-						{rules: [{ required: true, message: 'Por favor, digite o nome do país!' }]}
+						{
+							rules: [{ required: true, message: 'Por favor, digite o nome do país!' }],
+							initialValue: getInternalDataIfNotNull(documentData.country)
+						}
 					]"
 					:disabled="disabled"
 					@change="(value) => {
@@ -77,12 +99,22 @@ export default {
 		disabled: {
 			type: Boolean,
 			required: true
+		},
+		peopleSelectedRef: {
+			type: Object,
+			required: false
 		}
 	},
 	computed: {
 		...mapGetters(['peopleSelected','editingPeople']),
 		divId() {
 			return `document-${this.dataIndex}`;
+		},
+		documentData() {
+			if(!this.isEmpty(this.peopleSelected.document) && this.peopleSelected.document.length > this.dataIndex-1){
+				return this.peopleSelected.document[this.dataIndex-1]
+			} 
+			return []
 		}
 	},
 	data() {
@@ -100,6 +132,12 @@ export default {
 		},
 		onChangeInput(variable,value) {
 			
+		},
+		getInternalDataIfNotNull(data) {
+			if (data) {
+				return data;
+			}
+			return '';
 		}
 	}
 }

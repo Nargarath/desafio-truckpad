@@ -1,12 +1,23 @@
 <template>
   <div>
     <div id="people-datatable" v-show="!isOperating">
-      <div class="title">
-        <a-icon type="user" />
-        <h1>Pessoas</h1>
-      </div>
       <a-row justify='space-between'>
-        <a-col :sm="24" :md="12">
+      <a-col :sm="12">
+        <div class="title">
+          <a-icon type="user" />
+          <h1>Pessoas</h1>
+        </div>
+      </a-col>
+      <a-col :sm="12">
+        <div class="buttom-create">
+          <router-link :to="{ name: `dashboard.people.operation`,params: {id: 'create'}}" v-scroll-to="'#view'">
+            <a-button icon="plus" type="primary" @click="setPeople({},true)" ></a-button>
+          </router-link>
+        </div>
+      </a-col>
+      </a-row>
+      <a-row justify='space-between'>
+        <a-col :sm="24">
           <a-form
             :form="searchForm"
             layout="inline"
@@ -32,7 +43,7 @@
                 {rules: [{ required: true, message: 'Por favor, selecione a coluna que deseja buscar!' }]}
               ]"
               placeholder="coluna a procurar"
-              style="width:200px"
+              style="width:220px"
             >
               <a-select-option :value="search.searchable" v-for="search in searchables" :key="search.searchable" @click="selectSearch(search)">
                 {{search.searchable}}
@@ -41,25 +52,19 @@
           </a-form-item>
           
           <a-form-item
-            :wrapper-col="{ span: 12, offset: 6 }"
+            
           >
             <a-button icon="search" html-type="submit">Buscar</a-button>
           </a-form-item>
           <a-form-item
-            :wrapper-col="{ span: 12, offset: 6 }"
+            
           >
             <a-button icon="delete" @click="cleanForm" type="danger">Limpar</a-button>
           </a-form-item>
         </a-form>
         </a-col>
         <a-col :sm="24" :md="12">
-          <div class="buttom-create">
-            <router-link :to="{ name: `dashboard.people.operation`,params: {id: 'create'}}" v-scroll-to="'#view'">
-              <a-button icon="plus" type="primary" @click="setPeople({},true)" ></a-button>
-            </router-link>
-
-            
-          </div>
+          
         </a-col>
       </a-row>
       

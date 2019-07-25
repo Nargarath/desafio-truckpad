@@ -46,7 +46,7 @@ class BaseApiController extends Controller
         }
     }
 
-    public function put(Request $request)
+    public function put($id,Request $request)
     {
         try {
             $putted =  new $this->resourceName(
@@ -60,7 +60,7 @@ class BaseApiController extends Controller
         }
     }
 
-    public function patch(Request $request)
+    public function patch($id,Request $request)
     {
         try {
             $patched =  new $this->resourceName(

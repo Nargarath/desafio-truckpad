@@ -3,6 +3,8 @@
 		:trigger="null"
 		collapsible
 		v-model="collapsed"
+		breakpoint="md"
+		collapsedWidth="80"
 	>
 		<div class="logo" />
 		<a-menu theme="dark" mode="inline" :defaultSelectedKeys="['1']">

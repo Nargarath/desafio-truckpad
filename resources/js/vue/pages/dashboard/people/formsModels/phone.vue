@@ -5,13 +5,31 @@
 			:form="form"
 			@submit="handleSubmit"
 		>
+			<a-form-item>
+				<a-input
+					v-decorator="[
+						'id',
+						{
+							initialValue: getInternalDataIfNotNull(phoneData.id)
+						}
+					]"
+					:disabled="disabled"
+					@change="(value) => {
+						this.onChangeInput('id',value);
+					}"
+					type="hidden"
+				/>
+			</a-form-item>
 			<a-form-item
 				label="Número"
 			>
 				<a-input
 					v-decorator="[
 						'number',
-						{rules: [{ required: true, message: 'Por favor, digite número de telefone!' }]}
+						{
+							rules: [{ required: true, message: 'Por favor, digite número de telefone!' }],
+							initialValue: getInternalDataIfNotNull(phoneData.number)
+						}
 					]"
 					:disabled="disabled"
 					@change="(value) => {
@@ -37,12 +55,22 @@ export default {
 		disabled: {
 			type: Boolean,
 			required: true
+		},
+		peopleSelectedRef: {
+			type: Object,
+			required: false
 		}
 	},
 	computed: {
 		...mapGetters(['peopleSelected','editingPeople','phoneForms']),
 		divId() {
 			return `document-${this.dataIndex}`;
+		},
+		phoneData() {
+			if(!this.isEmpty(this.peopleSelected.phone) && this.peopleSelected.phone.length){
+				return this.peopleSelected.phone[this.dataIndex-1]
+			} 
+			return []
 		}
 	},
 	data() {
@@ -57,6 +85,12 @@ export default {
 		},
 		onChangeInput(variable,value) {
 
+		},
+		getInternalDataIfNotNull(data) {
+			if (data) {
+				return data;
+			}
+			return '';
 		}
 	}
 }

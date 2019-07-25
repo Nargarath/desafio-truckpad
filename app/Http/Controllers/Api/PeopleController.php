@@ -22,54 +22,20 @@ class PeopleController extends BaseApiController
         try {
             $peopleReceived = $request->all();
             
+            $return = $this->resourceType::create($peopleReceived);
+            if (!empty($peopleReceived['document'])) {
+                $return->document()->create(...$peopleReceived['document']);
+            }
+            if (!empty($peopleReceived['phone'])) {
+                $return->phone()->create(...$peopleReceived['phone']);
+            }
+            if (!empty($peopleReceived['address'])) {
+                $return->address()->create(...$peopleReceived['address']);
+            }
             $postted = new $this->resourceName(
-                $this->resourceType::create([
-                    'name' => $peopleReceived['name'],
-                    'birth_date' => $peopleReceived['birth_date']
-                ])
+                $return
             );
-            
-            $peopleCreatedId = $postted->id;
-
-            if(!empty($peopleReceived['documents'])) {
-                foreach ($peopleReceived['documents'] as $documentReceived) {
-                    $document = new Document;
-                    $document->country = $documentReceived['country'];
-                    $document->doc_type = $documentReceived['doc_type'];
-                    $document->number = $documentReceived['number'];
-                    $document->people()->associate($peopleCreatedId);
-                    $document->save();
-                }
-                
-            }
-            if(!empty($peopleReceived['addresses'])) {
-                foreach ($peopleReceived['addresses'] as $addressReceived) {
-                    $address = new Address;
-                    $address->name = $addressReceived['name'];
-                    $address->street_name = $addressReceived['street_name'];
-                    $address->street_number = $addressReceived['street_number'];
-                    $address->complement = $addressReceived['complement'];
-                    $address->postal_code = $addressReceived['postal_code'];
-                    $address->neighborhood = $addressReceived['neighborhood'];
-                    $address->state = $addressReceived['state'];
-                    $address->city = $addressReceived['city'];
-                    $address->country = $addressReceived['country'];
-                    $address->address_type = $addressReceived['address_type'];
-                    $address->people()->associate($peopleCreatedId);
-                    $address->save();
-                }
-            }
-            if(!empty($peopleReceived['phones'])) {
-                foreach ($peopleReceived['phones'] as $phoneReceived) {
-                    $phone = new Phone();
-                    $phone->number = $phoneReceived['number'];
-                    $phone->people()->associate($peopleCreatedId);
-                    $phone->save();
-                }
-            }
-            
-            $find = People::with('address','phone','document')->where(['id'=>$peopleCreatedId])->first();
-            return response()->json($find , 201);
+            return response()->json($postted , 201);
         }  
         catch (Exception $e) 
         {
@@ -77,4 +43,38 @@ class PeopleController extends BaseApiController
         }
     }
 
+    public function put($id,Request $request)
+    {        
+        try {
+            $updated = $this->resourceType::find($id)->update($request->all());
+            $putted =  new $this->resourceName(
+                $this->resourceType::find($id)
+            );
+            return response()->json($putted, 200);
+        }
+        catch (Exception $e) 
+        {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
+    public function datatable(Request $request)
+    {
+        extract($request->all());
+        
+        $datatable = $this->resourceType::with('document','phone','address')->orderBy($sortField??'id', $sortOrder??'desc');
+        
+        if (!empty($search) && $search !== '{}' && $search !== '{"search":"","searchable":""}')
+        {
+            $search = json_decode($search,true);
+            $datatable = $datatable->where($search['searchable'],'like',"%".$search['search']."%");
+        }
+        
+        
+        return $datatable->paginate($results??10);
+    }
+
+    public function deleteIfDontReceive($model,$dataReceived) {
+        
+    }
 }

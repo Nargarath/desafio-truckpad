@@ -5,13 +5,31 @@
 			:form="form"
 			@submit="handleSubmit"
 		>
+		<a-form-item>
+			<a-input
+				v-decorator="[
+					'id',
+					{
+						initialValue: getInternalDataIfNotNull(addressData.id)
+					}
+				]"
+				:disabled="disabled"
+				@change="(value) => {
+					this.onChangeInput('id',value);
+				}"
+				type="hidden"
+			/>
+		</a-form-item>
 			<a-form-item
 				label="Tipo de Endereço"
 			>
 				<a-select
 					v-decorator="[
 						'name',
-						{rules: [{ required: true, message: 'por favor, selecione o tipo de endereço!' }]}
+						{
+							rules: [{ required: true, message: 'por favor, selecione o tipo de endereço!' }],
+							initialValue: getInternalDataIfNotNull(addressData.name)
+						}
 					]"
 					placeholder="selecione um tipo"
 					@change="(value) => {
@@ -42,7 +60,10 @@
 					:disabled="disabled"
 					v-decorator="[
 						'postal_code',
-						{rules: [{ required: true, message: 'Por favor, digite o cep!' }]}
+						{
+							rules: [{ required: true, message: 'Por favor, digite o cep!' }],
+							initialValue: getInternalDataIfNotNull(addressData.postal_code)
+						}
 					]"
 					style="width: 100%"
 					:max="99999999"
@@ -57,7 +78,10 @@
 				<a-input
 					v-decorator="[
 						'street_name',
-						{rules: [{ required: true, message: 'Por favor, digite o nome da rua/avenida/logradouro!' }]}
+						{
+							rules: [{ required: true, message: 'Por favor, digite o nome da rua/avenida/logradouro!' }],
+							initialValue: getInternalDataIfNotNull(addressData.street_name)
+						}
 					]"
 					:disabled="disabled"
 					@change="(value) => {
@@ -72,7 +96,10 @@
 				<a-input
 					v-decorator="[
 						'street_number',
-						{rules: [{ required: true, message: 'Por favor, digite o numero do local!' }]}
+						{
+							rules: [{ required: true, message: 'Por favor, digite o numero do local!' }],
+							initialValue: getInternalDataIfNotNull(addressData.street_number)
+						}
 					]"
 					:disabled="disabled"
 					@change="(value) => {
@@ -87,7 +114,10 @@
 				<a-input
 					v-decorator="[
 						'complement',
-						{rules: [{ required: true, message: 'Por favor, digite o complemento!' }]}
+						{
+							rules: [{ required: true, message: 'Por favor, digite o complemento!' }],
+							initialValue: getInternalDataIfNotNull(addressData.complement)
+						}
 					]"
 					:disabled="disabled"
 					@change="(value) => {
@@ -102,7 +132,10 @@
 				<a-input
 					v-decorator="[
 						'neighborhood',
-						{rules: [{ required: true, message: 'Por favor, digite o bairro!' }]}
+						{
+							rules: [{ required: true, message: 'Por favor, digite o bairro!' }],
+							initialValue: getInternalDataIfNotNull(addressData.neighborhood)
+						}
 					]"
 					:disabled="disabled"
 					@change="(value) => {
@@ -117,7 +150,10 @@
 				<a-input
 					v-decorator="[
 						'state',
-						{rules: [{ required: true, message: 'Por favor, digite o estado!' }]}
+						{
+							rules: [{ required: true, message: 'Por favor, digite o estado!' }],
+							initialValue: getInternalDataIfNotNull(addressData.state)
+						}
 					]"
 					:disabled="disabled"
 					@change="(value) => {
@@ -132,7 +168,10 @@
 				<a-input
 					v-decorator="[
 						'city',
-						{rules: [{ required: true, message: 'Por favor, digite a cidade!' }]}
+						{
+							rules: [{ required: true, message: 'Por favor, digite a cidade!' }],
+							initialValue: getInternalDataIfNotNull(addressData.city)
+						}
 					]"
 					:disabled="disabled"
 					@change="(value) => {
@@ -147,7 +186,10 @@
 				<a-input
 					v-decorator="[
 						'country',
-						{rules: [{ required: true, message: 'Por favor, digite o país!' }]}
+						{
+							rules: [{ required: true, message: 'Por favor, digite o país!' }],
+							initialValue: getInternalDataIfNotNull(addressData.country)
+						}
 					]"
 					:disabled="disabled"
 					@change="(value) => {
@@ -175,12 +217,22 @@ export default {
 		disabled: {
 			type: Boolean,
 			required: true
+		},
+		peopleSelectedRef: {
+			type: Object,
+			required: false
 		}
 	},
 	computed: {
 		...mapGetters(['peopleSelected','editingPeople']),
 		divId() {
 			return `document-${this.dataIndex}`;
+		},
+		addressData() {
+			if( !this.isEmpty(this.peopleSelected.address) && this.peopleSelected.address.length){
+				return this.peopleSelected.address[this.dataIndex-1]
+			} 
+			return []
 		}
 	},
 	data() {
@@ -209,6 +261,12 @@ export default {
 		},
 		onChangeInput(variable,value) {
 
+		},
+		getInternalDataIfNotNull(data) {
+			if (data) {
+				return data;
+			}
+			return '';
 		}
 	}
 }

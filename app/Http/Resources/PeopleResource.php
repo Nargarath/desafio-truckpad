@@ -17,7 +17,10 @@ class PeopleResource extends JsonResource
     {
         return [
             'name' => $this->name,
-            'birth_date' => $this->birth_date
+            'birth_date' => $this->birth_date,
+            'document' => DocumentResource::collection($this->document),
+            'phone' => PhoneResource::collection($this->phone),
+            'address' => AddressResource::collection($this->address),
         ];
     }
 }

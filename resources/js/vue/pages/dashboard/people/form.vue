@@ -3,6 +3,7 @@
 		<a-row :gutter="24">
 			<a-col
 				:xs="26"
+			>
 				<a-alert :message="formReturn.message" :type="formReturn.type" showIcon :class="{'hidden': !formReturn.active}"/>
 			</a-col>
 		</a-row>
@@ -93,7 +94,7 @@
 				<div class="forms">
 					<div class="form-individual" v-for="index in documentNumber" :key="index">
 						<h3>Documento <strong>{{index}}</strong></h3>
-						<document-component ref="documentRef" :data-index="index" :disabled="disabledInput" ></document-component>
+						<document-component ref="documentRef" :data-index="index" :disabled="disabledInput"></document-component>
 					</div>
 					
 				</div>
@@ -159,8 +160,11 @@ export default {
 		phoneComponent,
 		documentComponent
 	},
+	mounted() {
+		this.startExtraDataValues();
+	},
 	computed: {
-		...mapGetters(['peopleSelected','editingPeople','documentForms','addressForms','phoneForms']),
+		...mapGetters(['peopleSelected','editingPeople']),
 		disabledInput(){
 			if(this.isCreating || this.editingPeople) {
 				return false;
@@ -226,7 +230,7 @@ export default {
 							}
 						);
 					} else {
-						ApiService.put('people.post',people , people.id)
+						ApiService.put('people.put',people , people.id)
 						.then(
 							(data) => {
 								this.formReturn.active = true
@@ -286,9 +290,9 @@ export default {
 			const addresses = this.addresses
 			const phones = this.phones
 		
-			people.documents = documents
-			people.addresses = addresses
-			people.phones = phones
+			people.document = documents
+			people.address = addresses
+			people.phone = phones
 
 			return people
 		},
@@ -333,8 +337,20 @@ export default {
 					});
 				}
 			}
-		}
-	}
+		},
+		startExtraDataValues() {
+			if(this.peopleSelected.document) {
+				this.documentNumber = this.peopleSelected.document.length
+			}
+			if(this.peopleSelected.phone) {
+				this.phoneNumber = this.peopleSelected.phone.length
+			}
+			if(this.peopleSelected.address) {
+				this.addressNumber = this.peopleSelected.address.length
+			}
+		},
+
+	},
 }
 </script>
 <style lang="scss">
